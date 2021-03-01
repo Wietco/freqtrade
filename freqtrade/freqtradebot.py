@@ -431,6 +431,13 @@ class FreqtradeBot(LoggingMixin):
             logger.info(f"Using Last {bid_strategy['price_side'].capitalize()} / Last Price")
             ticker = self.exchange.fetch_ticker(pair)
             ticker_rate = ticker[bid_strategy['price_side']]
+            if bid_strategy['price_side'] == 'bid':
+                ticker_delta = ticker['ask'] - ticker['bid']
+                ticker_increment = ticker_delta * 0.20
+                ticker_rate += ticker_increment
+                logger.info(
+                    f"Adjusting price from {ticker[bid_strategy['price_side']]} to {ticker_rate} side."
+                )
             if ticker['last'] and ticker_rate > ticker['last']:
                 balance = self.config['bid_strategy']['ask_last_balance']
                 ticker_rate = ticker_rate + balance * (ticker['last'] - ticker_rate)
