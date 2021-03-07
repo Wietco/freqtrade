@@ -51,6 +51,9 @@ class SpreadFilter(IPairList):
                               logger.info)
                 return False
             else:
+                self.log_once(f"Kept {pair} in whitelist, because spread "
+                              f"{spread * 100:.3f}% < {self._max_spread_ratio * 100}%",
+                              logger.info)
                 return True
         self.log_once(f"Removed {pair} from whitelist due to invalid ticker data: {ticker}",
                       logger.info)
